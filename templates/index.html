@@ -1,0 +1,390 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Poster Builder</title>
+    <style>
+      :root {
+        --accent: #0059b2;
+        --accent-light: #e6f0ff;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f5f7fa;
+        padding: 3rem 1rem;
+        color: #333;
+      }
+      h1 {
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      form {
+        max-width: 640px;
+        margin: auto;
+        background: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      }
+      label {
+        display: block;
+        margin-top: 1.4rem;
+        font-weight: 600;
+      }
+      input[type="text"],
+      input[type="url"],
+      input[type="file"],
+      textarea,
+      select {
+        display: block;
+        width: 100%;
+        margin-top: 0.4rem;
+        padding: 0.55rem 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        background: #fafafa;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 90px;
+      }
+      select,
+      input[type="file"] {
+        background: #fff;
+      }
+      .count {
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        color: #666;
+        float: right;
+      }
+      .over {
+        color: #d00;
+      }
+      .author-wrap {
+        display: flex;
+        margin-top: 0.4rem;
+      }
+      .author-wrap input {
+        flex: 1;
+        border: 1px solid #ccc;
+        border-radius: 6px 0 0 6px;
+        background: #fff;
+        padding: 0.55rem 0.8rem;
+        font-size: 1rem;
+      }
+      #addAuthor {
+        width: 48px;
+        border: none;
+        border-radius: 0 6px 6px 0;
+        background: var(--accent);
+        color: #fff;
+        font-size: 1.7rem;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      #addAuthor:hover {
+        background: #004a93;
+      }
+      .author-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #eef1f8;
+        padding: 0.55rem 0.9rem;
+        margin-top: 0.5rem;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+      .author-item button {
+        background: #ff4b4b;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        font-size: 1rem;
+        line-height: 0;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .author-item button:hover {
+        background: #e33a3a;
+      }
+      .checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        font-weight: 600;
+      }
+      button[type="submit"] {
+        margin-top: 2rem;
+        width: 100%;
+        padding: 0.8rem;
+        background: var(--accent);
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      button[type="submit"]:hover {
+        background: #004a93;
+      }
+      /* preview */
+      #previewWrap {
+        max-width: 900px;
+        margin: 3rem auto;
+        display: none;
+        text-align: center;
+      }
+      #previewWrap h2 {
+        margin-bottom: 1rem;
+      }
+      #previewImg {
+        max-width: 100%;
+        border: 1px solid #ccc;
+      }
+      .dl {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: background 0.2s;
+      }
+      .dl:hover {
+        background: #004a93;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Create SDU Project Poster</h1>
+
+    <form id="posterForm" enctype="multipart/form-data">
+      <label
+        >Project name
+        <input type="text" name="project_name" maxlength="40" required placeholder="e.g. Roomba Rampage" />
+        <span id="titleCount" class="count">0/40</span>
+      </label>
+
+      <label
+        >Description
+        <textarea name="description" rows="4" maxlength="290" required placeholder="Short project summary…"></textarea>
+        <span id="descCount" class="count">0/290</span>
+      </label>
+
+      <label
+        >Project link - Video/Paper/Website etc (optional)
+        <input type="url" name="project_link" placeholder="https://example.com" />
+      </label>
+
+      <label
+        >Semester
+        <select name="semester" required>
+          <option value="">-- choose --</option>
+          <option>1. Semester</option>
+          <option>2. Semester</option>
+          <option>3. Semester</option>
+          <option>4. Semester</option>
+          <option>5. Semester</option>
+          <option>6. Semester</option>
+          <option>7. Semester</option>
+          <option>8. Semester</option>
+          <option>9. Semester</option>
+          <option>10. Semester</option>
+        </select>
+      </label>
+
+      <label
+        >Course
+        <select name="course">
+          <option value="">-- choose --</option>
+          <option>3D programmering 3</option>
+          <option>Advanced Artificial Intelligence for Games</option>
+          <option>Bachelorprojekt</option>
+          <option>Creating dynamic 3D objects</option>
+          <option>Experts in Team Innovation</option>
+          <option>Hardware og robotteknologi 2</option>
+          <option>Hardware og robotteknologi 3</option>
+          <option>Human-Robot Interaction</option>
+          <option>Ingeniørfagets videnskabsteori</option>
+          <option>Introduction to Soft Robotics</option>
+          <option>Kandidatspeciale</option>
+          <option>Læringsteknologi 1</option>
+          <option>Læringsteknologi 2</option>
+          <option>Learning and Technology</option>
+          <option>Programmering af robotter og andre fysiske enheder</option>
+          <option>Projektledelse og forundersøgelse</option>
+          <option>Real-time web-applikationer</option>
+          <option>Scientific Methods</option>
+          <option>Simulationer og computerspil</option>
+          <option>Social Technology Lab 1</option>
+          <option>Social Technology Lab 2</option>
+          <option>Social Technology Lab 3</option>
+          <option>Sociale medier og læring</option>
+          <option>Softwarearkitektur</option>
+          <option>Spilprogrammering 1</option>
+          <option>Spilprogrammering 2</option>
+          <option>Spilprogrammering 3</option>
+          <option>Spildesign 1</option>
+          <option>Spildesign 2</option>
+          <option>Statistik</option>
+          <option>Technology Entrepreneurship</option>
+          <option>Virtual og Augmented Reality 1</option>
+          <option>Virtual og Augmented Reality 2</option>
+          <option>Web programmering 1</option>
+          <option>Web programmering 2</option>
+          <option>Web programmering 3</option>
+          <option>Web programmering 4</option>
+          <option>Æstetik, kreativitet og adfærdspsykologi</option>
+        </select>
+      </label>
+
+      <label
+        >Custom course (optional)
+        <input type="text" name="course_custom" placeholder="Write your own course" />
+      </label>
+
+      <label
+        >Authors
+        <div class="author-wrap">
+          <input type="text" id="authorInput" placeholder="Add author…" />
+          <button type="button" id="addAuthor">+</button>
+        </div>
+        <div id="authorList"></div>
+        <input type="hidden" name="authors" id="authorsHidden" required />
+      </label>
+
+      <label
+        >Images (multiple)
+        <input type="file" name="images" multiple required />
+      </label>
+
+      <div class="checkbox">
+        <input type="checkbox" name="dark" id="dark" />
+        <label for="dark" style="margin: 0; font-weight: 400">Dark theme (white on black)</label>
+      </div>
+
+      <button type="submit" id="genBtn">Generate</button>
+    </form>
+
+    <!-- preview -->
+    <div id="previewWrap">
+      <h2>Preview</h2>
+      <img id="previewImg" />
+      <div style="margin-top: 1rem">
+        <a id="dlLink" class="dl" href="#" download>Download image</a>
+        <button type="button" id="randBtn" class="dl" style="margin-left: 0.6rem">Randomize layout</button>
+      </div>
+    </div>
+
+    <script>
+      /* ---------- authors widget ---------- */
+      const input = document.getElementById("authorInput"),
+        list = document.getElementById("authorList"),
+        hidden = document.getElementById("authorsHidden"),
+        addBtn = document.getElementById("addAuthor");
+      function refreshHidden() {
+        hidden.value = [...list.querySelectorAll(".author-item span")].map((s) => s.textContent).join(", ");
+      }
+      function addAuthor() {
+        const n = input.value.trim();
+        if (!n) return;
+        const d = document.createElement("div");
+        d.className = "author-item";
+        d.innerHTML = `<span>${n}</span><button type="button">🗑</button>`;
+        d.querySelector("button").onclick = () => {
+          d.remove();
+          refreshHidden();
+        };
+        list.appendChild(d);
+        input.value = "";
+        refreshHidden();
+      }
+      addBtn.onclick = addAuthor;
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addAuthor();
+        }
+      });
+
+      /* ---------- counters ---------- */
+      const titleInput = document.querySelector('[name="project_name"]'),
+        descInput = document.querySelector('[name="description"]');
+      function upd(el, max) {
+        const n = el.value.length,
+          s = el.nextElementSibling;
+        s.textContent = `${n}/${max}`;
+        s.classList.toggle("over", n > max);
+      }
+      titleInput.addEventListener("input", () => upd(titleInput, 40));
+      descInput.addEventListener("input", () => upd(descInput, 290));
+      upd(titleInput, 40);
+      upd(descInput, 290);
+
+      /* ---------- submit / preview / disable buttons ---------- */
+      const form = document.getElementById("posterForm"),
+        genBtn = document.getElementById("genBtn"),
+        randBtn = document.getElementById("randBtn"),
+        wrap = document.getElementById("previewWrap"),
+        img = document.getElementById("previewImg"),
+        dl = document.getElementById("dlLink");
+
+      async function generatePoster() {
+        genBtn.disabled = true;
+        genBtn.textContent = "Generating…";
+        if (randBtn) {
+          randBtn.disabled = true;
+          randBtn.textContent = "Generating…";
+        }
+
+        const res = await fetch("/generate", { method: "POST", body: new FormData(form) });
+
+        if (res.ok) {
+          const j = await res.json();
+          img.src = j.url + "?t=" + Date.now();
+          dl.href = j.url;
+          dl.download = j.filename;
+          wrap.style.display = "block";
+          wrap.scrollIntoView({ behavior: "smooth" });
+        } else {
+          alert("Error generating poster");
+        }
+
+        genBtn.disabled = false;
+        genBtn.textContent = "Generate";
+        if (randBtn) {
+          randBtn.disabled = false;
+          randBtn.textContent = "Randomize layout";
+        }
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        generatePoster();
+      });
+      if (randBtn) randBtn.addEventListener("click", () => form.requestSubmit());
+    </script>
+  </body>
+</html>
